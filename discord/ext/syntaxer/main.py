@@ -23,7 +23,7 @@ def is_optional(annotation):
 class SpaceList(list):
     """
     A special list.
-    When you pass this list to ``str``, content will be converted with ``str``, and joins them with space.
+    When you pass this list to ``str``, content will be converted with :func:str, and joins them with space.
     """
     def __str__(self):
         return (" ".join([str(s) for s in self])).strip()
@@ -32,7 +32,7 @@ class SpaceList(list):
 class Syntax(SpaceList):
     """Analyze command and make Syntax object.
 
-    This inherits :class:`SpaceList`, so ``str(syntax)`` will return a formatted syntax.
+    This inherits :class:`SpaceList`, so :func:str will return a formatted syntax.
 
     Parameters
     ----------
@@ -113,7 +113,7 @@ class Syntax(SpaceList):
                 flag |= ArgumentType.kwarg
             else:
                 fmt = default_format
-            self.append(CommandArgument(name, required, desc, fmt.format(**formats), flag, default))
+            self.append(CommandArgument(name, required, desc, fmt.format(**formats), flag, default, pv))
 
     @property
     def args(self):
@@ -177,6 +177,8 @@ class CommandArgument(SyntaxElement):
         Type flag of the argument.
     default : Optional[Any]
         Default value of the argument if any.
+    param : :class:inspect.Parameter
+        Parameter for the argument.
     """
     name: str
     required: bool
@@ -184,6 +186,7 @@ class CommandArgument(SyntaxElement):
     formatted: str
     flag: ArgumentType
     default: Any
+    param: inspect.Parameter
 
     def __str__(self):
         return self.formatted
