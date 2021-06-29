@@ -5,8 +5,11 @@ import textwrap
 from typing import Any, Tuple
 
 from discord.ext import commands
-from discord.ext.commands.converter import _Greedy
-
+try:
+    from discord.ext.commands.converter import _Greedy as greedy
+except ImportError:
+    from discord.ext.commands.converter import Greedy as greedy
+    
 
 class ArgumentType(Flag):
     """Represents type of argument."""
@@ -104,7 +107,7 @@ class Syntax(SpaceList):
                 flag = ArgumentType.required
                 default = None
                 required = True
-            if pv.kind == inspect.Parameter.VAR_POSITIONAL or isinstance(pv.annotation, _Greedy):
+            if pv.kind == inspect.Parameter.VAR_POSITIONAL or isinstance(pv.annotation, greedy):
                 formats["variable_prefix"] = variable_formats[0]
                 formats["variable_suffix"] = variable_formats[1]
                 flag |= ArgumentType.variable
